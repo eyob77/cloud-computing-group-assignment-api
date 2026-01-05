@@ -16,7 +16,7 @@ export const createPost = async (req, res) => {
       body.contents.find(contentBlock => contentBlock.type === "image" && contentBlock.content === file.originalname).url = result.secure_url || result.url;
     }
 
-    
+
 
     const newPost = new Post({
       author: body.author || "",
@@ -42,7 +42,8 @@ export const createPost = async (req, res) => {
 
 export const getPost = async(req,res)=>{
     try {
-        console.log('hi from getPost')
+        const posts = await Post.find().sort({ createdAt: -1 }).select("-contents");
+        res.status(200).json(posts);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
     }
